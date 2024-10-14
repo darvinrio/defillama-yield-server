@@ -1,6 +1,7 @@
 import sdk from '@defillama/sdk';
 import axios from 'axios';
-import abi from './abi.json';
+import EarnVault from './EarnVault.json';
+import Accountant from './Accountant.json';
 
 const earnETH = '0x9Ed15383940CC380fAEF0a75edacE507cC775f22';
 const accountant = '0x411c78BC8c36c3c66784514f28c56209e1DF2755';
@@ -12,7 +13,7 @@ const apy = async () => {
     (
       await sdk.api.abi.call({
         target: earnETH,
-        abi: abi.find((m) => m.name === 'totalSupply'),
+        abi: EarnVault.find((m) => m.name === 'totalSupply'),
       })
     ).output / 1e18;
 
@@ -25,7 +26,7 @@ const apy = async () => {
     (
       await sdk.api.abi.call({
         target: accountant,
-        abi: abi.find((m) => m.name === 'getRate'),
+        abi: Accountant.find((m) => m.name === 'getRate'),
       })
     ).output / 1e18;
   const tvlUsd = totalSupply * currentRate * ethPrice;
@@ -46,12 +47,12 @@ const apy = async () => {
   const exchangeRates = await Promise.all([
     sdk.api.abi.call({
       target: accountant,
-      abi: abi.find((m) => m.name === 'getRate'),
+      abi: Accountant.find((m) => m.name === 'getRate'),
       block: block1dayAgo,
     }),
     sdk.api.abi.call({
       target: accountant,
-      abi: abi.find((m) => m.name === 'getRate'),
+      abi: Accountant.find((m) => m.name === 'getRate'),
       block: block7dayAgo,
     }),
   ]);
